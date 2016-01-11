@@ -29,6 +29,11 @@
             android:textColor="#fff" />
 
     </RelativeLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:id="@+id/timelineLayout">
     <TextView
         android:id="@+id/user_name"
         android:layout_width="match_parent"
@@ -37,6 +42,12 @@
         android:text="@string/hello"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#0080B4" />
+        <ListView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/timelinelistView">
 
+        </ListView>
+    </LinearLayout>
 
 </RelativeLayout>
