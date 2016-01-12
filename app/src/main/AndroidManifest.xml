@@ -23,6 +23,10 @@
             android:name=".InbuildWebView"
             android:label="@string/title_activity_inbuild_web_view" >
         </activity>
+        <activity
+            android:name=".TweetReply"
+            android:label="@string/title_activity_tweet_reply" >
+        </activity>
     </application>
 
 </manifest>

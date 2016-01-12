@@ -16,5 +16,6 @@
     <string name="twitter_consumer_secret">plreKZRYe2ugIjUIP0KwXJaZpmRbPi7IYc2ElW2tB141T4PVQg</string>
     <string name="twitter_oauth_verifier">oauth_verifier</string>
     <string name="title_activity_inbuild_web_view">InbuildWebView</string>
+    <string name="title_activity_tweet_reply">TweetReply</string>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.mona.personalizedtwitter;
+package com.mona.personalizedtwitter.customUtilites;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

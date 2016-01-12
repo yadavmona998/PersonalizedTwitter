@@ -1,4 +1,4 @@
-package com.mona.personalizedtwitter;
+package com.mona.personalizedtwitter.customUtilites;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
+
+import com.mona.personalizedtwitter.StringTokens;
 
 import twitter4j.Status;
 

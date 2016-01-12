@@ -1,4 +1,4 @@
-package com.mona.personalizedtwitter;
+package com.mona.personalizedtwitter.CustomTweetManger;
 
 /**
  * Created by mona on 1/11/2016.

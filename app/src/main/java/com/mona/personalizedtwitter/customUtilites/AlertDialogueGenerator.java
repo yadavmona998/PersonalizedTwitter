@@ -1,4 +1,4 @@
-package com.mona.personalizedtwitter;
+package com.mona.personalizedtwitter.customUtilites;
 
 import android.app.AlertDialog;
 import android.content.Context;
