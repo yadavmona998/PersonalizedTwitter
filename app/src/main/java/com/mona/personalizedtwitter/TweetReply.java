@@ -34,9 +34,8 @@ public class TweetReply extends ActionBarActivity implements View.OnClickListene
     private String oAuthVerifier = null;
 
 
-       /**the update ID for this tweet if it is a reply*/
+
     private long tweetID = 0;
-    /**the username for the tweet if it is a reply*/
     private String tweetName = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,49 +50,33 @@ public class TweetReply extends ActionBarActivity implements View.OnClickListene
         replyTweet();
     }
     private void replyTweet(){
-        //get preferences for user twitter details
         sharedPreferences = getSharedPreferences(StringTokens.PREF_NAME, 0);
-
-        //get user token and secret for authentication
         String userToken = sharedPreferences.getString(StringTokens.PREF_KEY_OAUTH_TOKEN, null);
         String userSecret = sharedPreferences.getString(StringTokens.PREF_KEY_OAUTH_SECRET, null);
 
-        //create a new twitter configuration usign user details
+
         Configuration twitConf = new ConfigurationBuilder().setOAuthConsumerKey(StringTokens.consumerKey).setOAuthConsumerSecret(StringTokens.consumerSecret).setOAuthAccessToken(userToken)
                 .setOAuthAccessTokenSecret(userSecret).build();
 
-        //create a twitter instance
+
         twitter = new TwitterFactory(twitConf).getInstance();
         Bundle extras = getIntent().getExtras();
-
-            //get the ID of the tweet we are replying to
-            tweetID = extras.getLong("tweetID");
-            //get the user screen name for the tweet we are replying to
-            tweetName = extras.getString("tweetUser");
-            Log.d(StringTokens.TAG,"ID"+tweetID);
-            Log.d(StringTokens.TAG,"NAme"+tweetName);
-            //use the passed information
-            EditText theReply = (EditText)findViewById(R.id.tweettext);
-            //start the tweet text for the reply @username
-            theReply.setText("@"+tweetName+" ");
-            //set the cursor to the end of the text for entry
-            theReply.setSelection(theReply.getText().length());
-
-
-        //set up listener for choosing home button to go to timeline
-        //LinearLayout tweetClicker = (LinearLayout)findViewById(R.id.homebtn);
-        //tweetClicker.setOnClickListener(this);
-
-        //set up listener for send tweet button
+        tweetID = extras.getLong("tweetID");
+        tweetName = extras.getString("tweetUser");
+        Log.d(StringTokens.TAG,"ID"+tweetID);
+        Log.d(StringTokens.TAG,"Name"+tweetName);
+        EditText theReply = (EditText)findViewById(R.id.tweettext);
+        theReply.setText("@"+tweetName+" ");
+        theReply.setSelection(theReply.getText().length());
         Button tweetButton = (Button)findViewById(R.id.dotweet);
         tweetButton.setOnClickListener(this);
 
     }
+
+
     public void onClick(View v) {
-        //handle home and send button clicks
-        EditText tweetTxt = (EditText)findViewById(R.id.tweettext);
-        //find out which view has been clicked
-        switch(v.getId()) {
+            EditText tweetTxt = (EditText)findViewById(R.id.tweettext);
+           switch(v.getId()) {
             case R.id.dotweet:
                 //send tweet
                 String toTweet = tweetTxt.getText().toString();
@@ -107,10 +90,6 @@ public class TweetReply extends ActionBarActivity implements View.OnClickListene
                 }
                 catch(TwitterException te) { Log.e(StringTokens.TAG, te.getMessage()); }
                 break;
-            //case R.id.homebtn:
-                //go to the home timeline
-
-               // break;
             default:
                 break;
 

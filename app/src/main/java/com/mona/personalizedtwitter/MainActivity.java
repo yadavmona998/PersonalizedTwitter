@@ -9,9 +9,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -27,9 +29,13 @@ import com.mona.personalizedtwitter.customUtilites.ConnectionChecker;
 import java.util.ArrayList;
 import java.util.List;
 
+import twitter4j.Query;
+import twitter4j.QueryResult;
+import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
+import twitter4j.TwitterResponse;
 import twitter4j.User;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
@@ -57,6 +63,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private View timeline_view;
     private ListView ls;
     private ProgressDialog pd;
+    private SwipeRefreshLayout swipeContainer;
+    private Integer flag=0;
+
+
 
     private String consumerKey = null;
     private String consumerSecret = null;
@@ -203,7 +213,21 @@ public class MainActivity extends Activity implements View.OnClickListener {
         timeline_view=(LinearLayout)findViewById(R.id.timelineLayout);
         userName = (TextView) findViewById(R.id.user_name);
         ls=(ListView)findViewById(R.id.timelinelistView);
+        swipeContainer=(SwipeRefreshLayout)findViewById(R.id.swipeContainer);
         //Log.d(TAG,"set view timeline "+ls);
+          swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                flag=1;
+                new fetchTimelineAsync().execute("startask");
+            }
+        });
+
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,android.R.color.holo_green_light
+        ,android.R.color.holo_orange_light,android.R.color.holo_red_light);
+
+
+
         if (!connectionChecker.checkConnection()) {
             alert.showAlertDialog(MainActivity.this, "Internet Connection Error", "Please connect to working Internet connection", false);
             return;
@@ -221,10 +245,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
             super.onPreExecute();
 
             pd = new ProgressDialog(MainActivity.this);
-            pd.setMessage("Fetching Twiter Timeline...");
+            pd.setMessage("Fetching Twitter Timeline...");
             pd.setIndeterminate(false);
             pd.setCancelable(false);
-            pd.show();
+           if(flag==0) pd.show();
         }
 
         @Override
@@ -243,24 +267,33 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 AccessToken accessToken = new AccessToken(access_token, access_token_secret);
 
                 Twitter timelineTwitter = new TwitterFactory(builder.build()).getInstance(accessToken);
-                Log.d(TAG,"got twitter instance successfully");
+                Log.d(TAG, "got twitter instance successfully");
                 try{
                     List<twitter4j.Status>homeTimeline=timelineTwitter.getHomeTimeline();
                     Log.d(TAG,"got timeline");
                     for (twitter4j.Status statusUpdate : homeTimeline) {
-                        String tst=statusUpdate.getText();
-                        CustomTweetModal t=new CustomTweetModal();
-                        Log.d(TAG, "fetched usertext" + tst);
-                        long statusID=statusUpdate.getId();
-                        String statusName=statusUpdate.getUser().getScreenName();
+                        String text = statusUpdate.getText();
+                        long statusID = statusUpdate.getId();
+                        String statusName = statusUpdate.getUser().getScreenName();
+                        CustomTweetModal t = new CustomTweetModal();
+
                         t.setT_id(statusID);
-                        Log.d(TAG,"id"+statusID);
-                        t.setUpdate_text(tst);
+                        Log.d(TAG, "id" + text + "mona"+statusUpdate.getInReplyToStatusId());
+
+                        t.setUpdate_text(text);
                         t.setUser_screen(statusName);
                         t.setUser_img(statusUpdate.getUser().getProfileImageURL().toString());
                         t.setUpdate_time(statusUpdate.getCreatedAt().getTime());
-                         tweets.add(t);
-                         Log.d(TAG, "tweet added and fetch successfully");
+                        t.setFav_count(statusUpdate.getFavoriteCount());
+                        if(statusUpdate.isFavorited())
+                            t.setIsfav(1);
+                        else
+                           t.setIsfav(0);
+
+
+                        tweets.add(t);
+                        Log.d(TAG, "tweet added and fetch successfully");
+
 
                     }
                 }
@@ -272,15 +305,33 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-
+            if(flag==0)
             pd.dismiss();
+            else
+               swipeContainer.setRefreshing(false);
+            flag=0;
             Toast.makeText(MainActivity.this, "Posted to Twitter!", Toast.LENGTH_SHORT);
             CustomTweetAdapter myAdapter=new CustomTweetAdapter(MainActivity.this,R.layout.tweet_row,tweets);
+
+            Log.d(TAG,"before writing onitemclicklistener");
+            ls.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Object o = ls.getItemAtPosition(position);
+
+                    CustomTweetModal tweetData = (CustomTweetModal) o;
+
+                    Intent intent = new Intent(MainActivity.this, TweetDetailsActivity.class);
+                    intent.putExtra("tweet", tweetData);
+                    Log.d(TAG, "called onitemclicklistener" + tweetData.getUpdate_text());
+                    startActivity(intent);
+                }
+            });
             ls.setAdapter(myAdapter);
+
         }
     }
-    
+
 
 
 }
-

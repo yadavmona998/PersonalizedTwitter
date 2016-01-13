@@ -5,7 +5,7 @@
     <string name="action_settings">Settings</string>
 
 
-    <string name="hello">Hello,</string>
+    <string name="Hello">Hello,</string>
     <string name="login_label">Login to Twitter</string>
 
     <string name="login_btn">Login to Twitter</string>
@@ -17,5 +17,6 @@
     <string name="twitter_oauth_verifier">oauth_verifier</string>
     <string name="title_activity_inbuild_web_view">InbuildWebView</string>
     <string name="title_activity_tweet_reply">TweetReply</string>
+    <string name="title_activity_tweet_details">TweetDetailsActivity</string>
 
 </resources>

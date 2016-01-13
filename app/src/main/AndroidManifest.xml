@@ -27,6 +27,10 @@
             android:name=".TweetReply"
             android:label="@string/title_activity_tweet_reply" >
         </activity>
+        <activity
+            android:name=".TweetDetailsActivity"
+            android:label="@string/title_activity_tweet_details" >
+        </activity>
     </application>
 
 </manifest>

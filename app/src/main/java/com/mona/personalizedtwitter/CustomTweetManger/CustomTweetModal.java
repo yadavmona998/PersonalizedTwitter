@@ -1,11 +1,19 @@
 package com.mona.personalizedtwitter.CustomTweetManger;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import twitter4j.Status;
+
 /**
  * Created by mona on 1/11/2016.
  */
-public class CustomTweetModal  {
+public class CustomTweetModal implements Serializable {
     String update_text,user_screen,user_img;
     Long t_id,update_time;
+    Integer fav_count,isfav;
+
 
     public String getUpdate_text() {
         return update_text;
@@ -45,5 +53,21 @@ public class CustomTweetModal  {
 
     public Long getT_id() {
         return t_id;
+    }
+
+    public int getFav_count() {
+        return fav_count;
+    }
+
+    public void setFav_count(int fav_count) {
+        this.fav_count = fav_count;
+    }
+
+    public Integer getIsfav() {
+        return isfav;
+    }
+
+    public void setIsfav(Integer isfav) {
+        this.isfav = isfav;
     }
 }
